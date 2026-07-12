@@ -5,13 +5,20 @@ class Romyq < Formula
   homepage "https://github.com/Webrowse/romyq"
   url "https://files.pythonhosted.org/packages/source/r/romyq/romyq-0.10.3.tar.gz"
   sha256 "24118f0bb6e0992410af1bd6f86bb406e73fceaf19fa982dff6cd5757346b50a"
+  license "MIT"
 
   depends_on "python@3.13"
   depends_on "expat"
 
   def install
     stage_pyexpat_fix if OS.mac?
-    virtualenv_install_with_resources
+    venv = virtualenv_create(libexec, "python3.13")
+    # Install from PyPI wheels instead of resource sdists: the dependency
+    # tree (openai -> pydantic-core, jiter) contains Rust extensions that
+    # would otherwise be compiled on every user's machine.
+    system libexec/"bin/python", "-m", "pip", "install",
+           "--quiet", "--no-compile", "romyq==#{version}"
+    bin.install_symlink libexec/"bin/romyq"
   end
 
   # pip cannot start on macOS 26.2+CLT 26.0: system libexpat lacks AllocTracker symbols that the Python 3.13 bottle's pyexpat expects.
@@ -37,5 +44,8 @@ class Romyq < Formula
 
   test do
     system "#{bin}/romyq", "--help"
+    # Exercise the import chain that needs third-party deps (openai, dotenv):
+    # a bare `--help` passes even when the virtualenv is missing them.
+    system libexec/"bin/python", "-c", "import romyq.loop"
   end
 end
