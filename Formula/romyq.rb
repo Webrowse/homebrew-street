@@ -3,8 +3,8 @@ class Romyq < Formula
 
   desc "AI project governance and management CLI"
   homepage "https://github.com/Webrowse/romyq"
-  url "https://files.pythonhosted.org/packages/source/r/romyq/romyq-0.10.3.tar.gz"
-  sha256 "24118f0bb6e0992410af1bd6f86bb406e73fceaf19fa982dff6cd5757346b50a"
+  url "https://files.pythonhosted.org/packages/f3/9b/0af0e574f4a7f5b3252ae07ffcaed12737e1515ae4f38b971df37eda10d5/romyq-0.11.0.tar.gz"
+  sha256 "4d0ecea00be1e9aad87776be479efaae53a2f98899fc4c4df62de7392de7bf45"
   license "MIT"
 
   depends_on "python@3.13"
